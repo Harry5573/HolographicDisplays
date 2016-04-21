@@ -23,7 +23,7 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 
 	private boolean lockTick;
 	private CraftHologramLine parentPiece;
-	
+
 	public EntityNMSArmorStand(World world, CraftHologramLine parentPiece) {
 		super(world);
 		setInvisible(true);
@@ -31,6 +31,7 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 		setArms(false);
 		setGravity(true);
 		setBasePlate(true);
+
 		this.parentPiece = parentPiece;
 		try {
 			ReflectionUtils.setPrivateField(EntityArmorStand.class, this, "bi", Integer.MAX_VALUE);
@@ -39,13 +40,13 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 		}
 		forceSetBoundingBox(new NullBoundingBox());
 	}
-	
-	
+
+
 	@Override
 	public void b(NBTTagCompound nbttagcompound) {
 		// Do not save NBT.
 	}
-	
+
 	@Override
 	public boolean c(NBTTagCompound nbttagcompound) {
 		// Do not save NBT.
@@ -57,13 +58,13 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 		// Do not save NBT.
 		return false;
 	}
-	
+
 	@Override
 	public void e(NBTTagCompound nbttagcompound) {
 		// Do not save NBT.
 	}
-	
-	
+
+
 	@Override
 	public boolean isInvulnerable(DamageSource source) {
 		/*
@@ -73,12 +74,12 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 		 */
 	    return true;
 	}
-	
+
 	@Override
 	public void setCustomName(String customName) {
 		// Locks the custom name.
 	}
-	
+
 	@Override
 	public void setCustomNameVisible(boolean visible) {
 		// Locks the custom name.
@@ -100,25 +101,25 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 	public void setEquipment(int i, ItemStack item) {
 		// Prevent stand being equipped
 	}
-	
+
 	@Override
 	public void a(AxisAlignedBB boundingBox) {
 		// Do not change it!
 	}
-	
+
 	public void forceSetBoundingBox(AxisAlignedBB boundingBox) {
 		super.a(boundingBox);
 	}
-	
+
 	@Override
 	public int getId() {
-		
+
 		StackTraceElement[] elements = Thread.currentThread().getStackTrace();
 		if (elements.length > 2 && elements[2] != null && elements[2].getFileName().equals("EntityTrackerEntry.java") && elements[2].getLineNumber() > 137 && elements[2].getLineNumber() < 147) {
 			// Then this method is being called when creating a new packet, we return a fake ID!
 			return -1;
 		}
-		
+
 		return super.getId();
 	}
 
@@ -128,12 +129,12 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 			super.t_();
 		}
 	}
-	
+
 	@Override
 	public void makeSound(String sound, float f1, float f2) {
 	    // Remove sounds.
 	}
-	
+
 	@Override
 	public void setCustomNameNMS(String name) {
 		if (name != null && name.length() > 300) {
@@ -142,28 +143,28 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 		super.setCustomName(name);
 		super.setCustomNameVisible(name != null && !name.isEmpty());
 	}
-	
+
 	@Override
 	public String getCustomNameNMS() {
 		return super.getCustomName();
 	}
-	
-	
+
+
 	public void callSuperTick() {
 		super.h();
 	}
-	
+
 	@Override
 	public void setLockTick(boolean lock) {
 		lockTick = lock;
 	}
-	
+
 	@Override
 	public void die() {
 		setLockTick(false);
 		super.die();
 	}
-	
+
 	@Override
 	public CraftEntity getBukkitEntity() {
 		if (super.bukkitEntity == null) {
@@ -171,22 +172,23 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 	    }
 		return this.bukkitEntity;
 	}
-	
+
 	@Override
 	public void killEntityNMS() {
 		die();
 	}
-	
+
 	@Override
 	public void setLocationNMS(double x, double y, double z) {
 		super.setPosition(x, y, z);
-		
+
 		// Send a packet near to update the position.
 		PacketPlayOutEntityTeleport teleportPacket = new PacketPlayOutEntityTeleport(
 			getIdNMS(),
 			MathHelper.floor(this.locX * 32.0D),
 			MathHelper.floor(this.locY * 32.0D),
 			MathHelper.floor(this.locZ * 32.0D),
+
 			(byte) (int) (this.yaw * 256.0F / 360.0F),
 			(byte) (int) (this.pitch * 256.0F / 360.0F),
 			this.onGround
@@ -208,7 +210,7 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 	public boolean isDeadNMS() {
 		return this.dead;
 	}
-	
+
 	@Override
 	public int getIdNMS() {
 		return super.getId(); // Return the real ID without checking the stack trace.
@@ -218,7 +220,7 @@ public class EntityNMSArmorStand extends EntityArmorStand implements NMSArmorSta
 	public CraftHologramLine getHologramLine() {
 		return parentPiece;
 	}
-	
+
 	@Override
 	public org.bukkit.entity.Entity getBukkitEntityNMS() {
 		return getBukkitEntity();

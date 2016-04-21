@@ -16,7 +16,7 @@ public class CraftNMSItem extends CraftItem {
 	}
 
 	// Disallow all the bukkit methods.
-	
+
 	@Override
 	public void remove() {
 		// Cannot be removed, this is the most important to override.
@@ -33,7 +33,7 @@ public class CraftNMSItem extends CraftItem {
 	@Override public boolean eject() { return false; }
 	@Override public boolean leaveVehicle() { return false; }
 	@Override public void playEffect(EntityEffect effect) { }
-	
+
 	// Methods from Item
 	@Override public void setItemStack(ItemStack stack) { }
 	@Override public void setPickupDelay(int delay) { }

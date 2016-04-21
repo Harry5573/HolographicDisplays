@@ -17,7 +17,7 @@ public class EntityNMSHorse extends EntityHorse implements NMSHorse {
 
 	private boolean lockTick;
 	private CraftHologramLine parentPiece;
-	
+
 	public EntityNMSHorse(World world, CraftHologramLine parentPiece) {
 		super(world);
 		super.ageLocked = true;
@@ -32,7 +32,7 @@ public class EntityNMSHorse extends EntityHorse implements NMSHorse {
 		setAge(-1700000); // This is a magic value. No one will see the real horse.
 		this.parentPiece = parentPiece;
 	}
-	
+
 	@Override
 	public void h() {
 		// Checks every 20 ticks.
@@ -42,17 +42,17 @@ public class EntityNMSHorse extends EntityHorse implements NMSHorse {
 				die();
 			}
 		}
-		
+
 		if (!lockTick) {
 			super.h();
 		}
 	}
-	
+
 	@Override
 	public void b(NBTTagCompound nbttagcompound) {
 		// Do not save NBT.
 	}
-	
+
 	@Override
 	public boolean c(NBTTagCompound nbttagcompound) {
 		// Do not save NBT.
@@ -64,12 +64,12 @@ public class EntityNMSHorse extends EntityHorse implements NMSHorse {
 		// Do not save NBT.
 		return false;
 	}
-	
+
 	@Override
 	public void e(NBTTagCompound nbttagcompound) {
 		// Do not save NBT.
 	}
-	
+
 	@Override
 	public boolean isInvulnerable() {
 		/*
@@ -84,28 +84,28 @@ public class EntityNMSHorse extends EntityHorse implements NMSHorse {
 	public void setCustomName(String customName) {
 		// Locks the custom name.
 	}
-	
+
 	@Override
 	public void setCustomNameVisible(boolean visible) {
 		// Locks the custom name.
 	}
-	
+
 	@Override
 	public void makeSound(String sound, float volume, float pitch) {
 	    // Remove sounds.
 	}
-	
+
 	@Override
 	public void setLockTick(boolean lock) {
 		lockTick = lock;
 	}
-	
+
 	@Override
 	public void die() {
 		setLockTick(false);
 		super.die();
 	}
-	
+
 	@Override
 	public void setCustomNameNMS(String name) {
 		if (name != null && name.length() > 300) {
@@ -114,12 +114,12 @@ public class EntityNMSHorse extends EntityHorse implements NMSHorse {
  		super.setCustomName(name);
 		super.setCustomNameVisible(name != null && !name.isEmpty());
 	}
-	
+
 	@Override
 	public CraftEntity getBukkitEntity() {
 		if (super.bukkitEntity == null) {
 			this.bukkitEntity = new CraftNMSHorse(this.world.getServer(), this);
-	    }
+	    	}
 		return this.bukkitEntity;
 	}
 
@@ -132,17 +132,17 @@ public class EntityNMSHorse extends EntityHorse implements NMSHorse {
 	public String getCustomNameNMS() {
 		return super.getCustomName();
 	}
-	
+
 	@Override
 	public void killEntityNMS() {
 		die();
 	}
-	
+
 	@Override
 	public void setLocationNMS(double x, double y, double z) {
 		super.setPosition(x, y, z);
 	}
-	
+
 	@Override
 	public int getIdNMS() {
 		return this.getId();
@@ -152,21 +152,21 @@ public class EntityNMSHorse extends EntityHorse implements NMSHorse {
 	public CraftHologramLine getHologramLine() {
 		return parentPiece;
 	}
-	
+
 	@Override
 	public org.bukkit.entity.Entity getBukkitEntityNMS() {
 		return getBukkitEntity();
 	}
-	
+
 	@Override
 	public void setPassengerOfNMS(NMSEntityBase vehicleBase) {
 		if (vehicleBase == null || !(vehicleBase instanceof Entity)) {
 			// It should never dismount
 			return;
 		}
-		
+
 		Entity entity = (Entity) vehicleBase;
-		
+
 		try {
 			ReflectionUtils.setPrivateField(Entity.class, this, "g", (double) 0.0);
 			ReflectionUtils.setPrivateField(Entity.class, this, "h", (double) 0.0);
@@ -177,7 +177,7 @@ public class EntityNMSHorse extends EntityHorse implements NMSHorse {
         if (this.vehicle != null) {
         	this.vehicle.passenger = null;
         }
-        
+
         this.vehicle = entity;
         entity.passenger = this;
 	}
