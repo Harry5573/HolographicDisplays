@@ -25,27 +25,27 @@ import com.gmail.filoghost.holographicdisplays.util.ItemUtils;
 import com.gmail.filoghost.holographicdisplays.util.ReflectionUtils;
 
 public class EntityNMSItem extends EntityItem implements NMSItem {
-	
+
 	private boolean lockTick;
 	private CraftItemLine parentPiece;
-	
+
 	public EntityNMSItem(World world, CraftItemLine piece) {
 		super(world);
 		super.pickupDelay = Integer.MAX_VALUE;
 		this.parentPiece = piece;
 	}
-	
+
 	@Override
 	public void s_() {
-		
+
 		// So it won't get removed.
 		ticksLived = 0;
-		
+
 		if (!lockTick) {
 			super.s_();
 		}
 	}
-	
+
 	@Override
 	public ItemStack getItemStack() {
 		// Dirty method to check if the icon is being picked up
@@ -53,30 +53,30 @@ public class EntityNMSItem extends EntityItem implements NMSItem {
 		if (stacktrace.length > 2 && stacktrace[2].getClassName().contains("EntityInsentient")) {
 			return null; // Try to pickup this, dear entity ignoring the pickupDelay!
 		}
-		
+
 		return super.getItemStack();
 	}
-	
+
 	// Method called when a player is near.
 	@Override
 	public void d(EntityHuman human) {
-		
+
 		if (human.locY < this.locY - 1.5 || human.locY > this.locY + 1.0) {
 			// Too low or too high, it's a bit weird.
 			return;
 		}
-		
+
 		if (parentPiece.getPickupHandler() != null && human instanceof EntityPlayer) {
 			MainListener.handleItemLinePickup((Player) human.getBukkitEntity(), parentPiece.getPickupHandler(), parentPiece.getParent());
 			// It is never added to the inventory.
 		}
 	}
-	
+
 	@Override
 	public void b(NBTTagCompound nbttagcompound) {
 		// Do not save NBT.
 	}
-	
+
 	@Override
 	public boolean c(NBTTagCompound nbttagcompound) {
 		// Do not save NBT.
@@ -88,12 +88,12 @@ public class EntityNMSItem extends EntityItem implements NMSItem {
 		// Do not save NBT.
 		return false;
 	}
-	
+
 	@Override
 	public void e(NBTTagCompound nbttagcompound) {
 		// Do not save NBT.
 	}
-	
+
 	@Override
 	public boolean isInvulnerable(DamageSource source) {
 		/*
@@ -103,11 +103,11 @@ public class EntityNMSItem extends EntityItem implements NMSItem {
 		 */
 	    return true;
 	}
-	
+
 	@Override
 	public void inactiveTick() {
 		// Check inactive ticks.
-		
+
 		if (!lockTick) {
 			super.inactiveTick();
 		}
@@ -117,7 +117,7 @@ public class EntityNMSItem extends EntityItem implements NMSItem {
 	public void setLockTick(boolean lock) {
 		lockTick = lock;
 	}
-	
+
 	@Override
 	public void die() {
 		setLockTick(false);
@@ -136,12 +136,12 @@ public class EntityNMSItem extends EntityItem implements NMSItem {
 	public boolean isDeadNMS() {
 		return this.dead;
 	}
-	
+
 	@Override
 	public void killEntityNMS() {
 		die();
 	}
-	
+
 	@Override
 	public void setLocationNMS(double x, double y, double z) {
 		super.setPosition(x, y, z);
@@ -150,38 +150,38 @@ public class EntityNMSItem extends EntityItem implements NMSItem {
 	@Override
 	public void setItemStackNMS(org.bukkit.inventory.ItemStack stack) {
 		ItemStack newItem = CraftItemStack.asNMSCopy(stack);
-		
+
 		if (newItem == null) {
 			newItem = new ItemStack(Blocks.BEDROCK);
 		}
-		
+
 		if (newItem.getTag() == null) {
 			newItem.setTag(new NBTTagCompound());
 		}
 		NBTTagCompound display = newItem.getTag().getCompound("display");
-		
+
 		if (!newItem.getTag().hasKey("display")) {
 		newItem.getTag().set("display", display);
 		}
-		
+
 		NBTTagList tagList = new NBTTagList();
 		tagList.add(new NBTTagString(ItemUtils.ANTISTACK_LORE)); // Antistack lore
-		
+
 		display.set("Lore", tagList);
 		newItem.count = 0;
 		setItemStack(newItem);
 	}
-	
+
 	@Override
 	public int getIdNMS() {
 		return this.getId();
 	}
-	
+
 	@Override
 	public CraftItemLine getHologramLine() {
 		return parentPiece;
 	}
-	
+
 	@Override
 	public void allowPickup(boolean pickup) {
 		if (pickup) {
@@ -190,21 +190,21 @@ public class EntityNMSItem extends EntityItem implements NMSItem {
 			super.pickupDelay = Integer.MAX_VALUE;
 		}
 	}
-	
+
 	@Override
 	public org.bukkit.entity.Entity getBukkitEntityNMS() {
 		return getBukkitEntity();
 	}
-	
+
 	@Override
 	public void setPassengerOfNMS(NMSEntityBase vehicleBase) {
 		if (vehicleBase == null || !(vehicleBase instanceof Entity)) {
 			// It should never dismount
 			return;
 		}
-		
+
 		Entity entity = (Entity) vehicleBase;
-		
+
 		try {
 			ReflectionUtils.setPrivateField(Entity.class, this, "ap", (double) 0.0);
 			ReflectionUtils.setPrivateField(Entity.class, this, "aq", (double) 0.0);
@@ -215,11 +215,11 @@ public class EntityNMSItem extends EntityItem implements NMSItem {
         if (this.vehicle != null) {
         	this.vehicle.passenger = null;
         }
-        
+
         this.vehicle = entity;
         entity.passenger = this;
 	}
-	
+
 	@Override
 	public Object getRawItemStack() {
 		return super.getItemStack();

@@ -1,0 +1,26 @@
+# Eclipse
+.classpath
+.project
+.settings
+
+# NetBeans
+.nbproject
+
+# IntelliJ Idea
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Mac
+.DS_Store
+*.DS_Store
+
+# Maven
+log/
+target/
+dependency-reduced-pom.xml
+
+# Gradle
+build/
+.gradle
